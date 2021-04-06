@@ -7,7 +7,7 @@
 	//매니저 등록이 안 되어 있거나 매니저레벨이 1보다 낮은 경우 진입 불가
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
+		response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 		System.out.println("레벨이 1보다 낮습니다.");
 		return;
 	}
@@ -21,5 +21,5 @@
 		CommentDao.deleteComment(commentNo, managerId);
 	}
 	System.out.printf("commentNo:%d, managerid:%s, noticeNo:%d%n", commentNo, managerId, noticeNo);
-	response.sendRedirect(request.getContextPath()+"/notice/noticeOne.jsp?noticeNo="+noticeNo);
+	response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/noticeOne.jsp?noticeNo="+noticeNo);
 %>

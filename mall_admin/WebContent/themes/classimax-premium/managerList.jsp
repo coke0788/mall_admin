@@ -157,7 +157,7 @@
 									}
 									%>
 								</select>
-								<button type="submit" class="btn btn-main-sm">modify</button>
+								<button type="submit" class="btn btn-main-sm">edit</button>
 								</form></td>
 								<td class="text-center" style="width: 8.33%">
 									<div class="justify-content-center">

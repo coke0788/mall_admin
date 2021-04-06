@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>noticeList</title>
+  <title>ebookList</title>
   
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
@@ -42,7 +42,6 @@
 
 <body class="body-wrapper">
 
-
 <!-- 네비게이션 바 부분 -->
 <section>
 	<div class="container">
@@ -58,10 +57,14 @@
 							<jsp:include page="/inc/adminMenu.jsp"></jsp:include>
 						</ul>
 					<%
+						//글자 인코딩
 						request.setCharacterEncoding("utf-8");
 						//관리자 진입 조건 설정
 						Manager manager = (Manager)session.getAttribute("sessionManager"); //manager 사용하기 위해서 불러오기.
-						if(manager == null || manager.getManagerLevel() < 1){ //만약 session manager 레벨이 1보다 낮은 경우 admin index로 이동
+						if(manager == null){ //만약 session manager가 null인 경우 admin index로 이동
+							response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
+							return;
+						} else if(manager.getManagerLevel() < 2){ //메니저 레벨이 2보다 낮은 경우에도 admin index로 이동하도록.
 							response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 							return;
 						}
@@ -71,27 +74,27 @@
 							currentPage = Integer.parseInt(request.getParameter("currentPage"));
 						}
 						//페이지 당 row
-						int rowPerPage = 5;
+						int rowPerPage = 10;
 						if(request.getParameter("rowPerPage")!=null){
 							rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 						}
-						//검색어 변수 선언
-						String searchWord = "";
+						//카테고리 이름 변수 선언
+						String categoryName=request.getParameter("categoryName");
 						//검색어가 넘어오면
-						if(request.getParameter("searchWord")!=null){
-							searchWord = request.getParameter("searchWord");
+						if(request.getParameter("categoryName")!=null){
+							categoryName = request.getParameter("categoryName");
 						}
 						//시작 행
-						int beginRow = (currentPage-1) * rowPerPage;		
+						int beginRow = (currentPage-1) * 10;		
 						//전체 행과 마지막 페이지
-						int totalRow = NoticeDao.totalCount(searchWord);
+						int totalRow = EbookDao.totalCount(categoryName);
 						int lastPage = totalRow/rowPerPage;
 						if(totalRow % rowPerPage != 0) {
 							lastPage += 1; //totalrow를 rowperpage로 나눴을때 나머지가 0이 아니면 라스트 페이지에 1을 더한다.
 						}
 						
-						//NoticeDao 클래스에서 배열 받아오기
-						ArrayList<Notice> list = NoticeDao.selectNoticeList(rowPerPage, beginRow, searchWord);
+						//ClientDao 클래스에서 배열 받아오기
+						ArrayList<Ebook> list = EbookDao.selectEbookList(rowPerPage, beginRow, categoryName);
 					%>
 						<ul class="navbar-nav ml-auto mt-10">
 							<li class="nav-item">
@@ -104,7 +107,6 @@
 		</div>
 	</div>
 </section>
-
 <!--================================
 =            Page Title            =
 =================================-->
@@ -114,68 +116,108 @@
 		<div class="row">
 			<div class="col-md-8 offset-md-2 text-center">
 				<!-- Title text -->
-				<h3>Notice</h3>
+				<h3>ALL OF E-BOOK LIST</h3>
 			</div>
 		</div>
 	</div>
 	<!-- Container End -->
 </section>
-<!--==================================
-=            Blog Section            =
-===================================-->
-
-<section class="blog section">
+<!--================================
+=            List		           =
+=================================-->
+<section class="section-sm">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
-			<a href="<%=request.getContextPath()%>/themes/classimax-premium/insertNoticeForm.jsp?managerId=<%=manager.getManagerId()%>"><button type="button" class="btn btn-outline-primary py-1 float-right">POST</button></a>
-			<!-- 페이지갯수 설정 -->
-			<form action="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp" method="post">
-				<!-- 히든값으로 searchword 넘기기 -->
-				<input type= "hidden" name="searchword" value="<%=searchWord%>">
-				<select name="rowPerPage">
-					<%
-						for(int i=5; i<=20; i+=5){
-							if(rowPerPage==i){
+		<!-- 카테고리별 목록을 볼 수 있는 메뉴 있어야 됨. 카테고리 클릭하면 갈 수 있는 네비게이션 메뉴 -->
+		<div class="view text-center">
+		<form action="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp" method="post">
+			<strong>Category</strong>
+			<ul class="list-inline view-switcher">
+				<li class="list-inline-item">
+					<a href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp"><i class="fa fa-reorder"></i> 전체보기</a>
+				</li>
+					<%	
+						//arraylist 받아오기
+						ArrayList<String> categoryNameList=CategoryDao.categoryNameList();
+						for(String s : categoryNameList){
 					%>
-						<option value="<%=i%>" selected="selected"><%=i%></option>
-					<%
-							}else {
-					%>
-								<option value="<%=i%>"><%=i%></option>
-					<%
-							}
-						}
-					%>
-				</select>
-				<button type="submit" class="btn btn-main-sm">보기</button>
-			</form>
-				<!-- notice 샘플 -->
-				<article>
-					<!-- Post Title -->
-					<%
-						for(Notice n : list) {
-					%>
-					<!-- Post Image -->
-						<div class="image">
-							<img src="images/news.jpg" height="350" alt="article-01">
-						</div>
-						<h3>No. <%=n.getNoticeNo()%>&nbsp; &nbsp;│<i class="fa fa-bell"></i> <%=n.getNoticeTitle()%></h3>
-						<ul class="list-inline">
-							<li class="list-inline-item">by <%=manager.getManagerId()%></li>
-							<li class="list-inline-item"><%=n.getNoticeDate().substring(0,11)%></li>
-						</ul>
-						<p class=""><%=n.getNoticeContent()%></p>
-						<!-- Read more button -->
-						<a href="<%=request.getContextPath()%>/themes/classimax-premium/noticeOne.jsp?noticeNo=<%=n.getNoticeNo()%>" class="btn btn-transparent py-1">Read More</a><br>
-						<hr>
+						<li class="list-inline-item">
+							<a href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?categoryName=<%=s%>"><i class="fa fa-book"></i> <%=s%></a>
+						</li>
 					<%
 						}
 					%>
-				</article>
-				<!-- Article 01 -->
-				<!-- Pagination -->
-		<!-- pagination -->
+			</ul>
+		</form>
+		</div>
+	<!-- 페이지 개수 보기 -->
+	<form action="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp" method="post">
+		<!-- 히든값으로 카테고리네임 넘겨서 몇개씩 보기 누르면 카테고리네임이 넘어가도록. 그러면 몇개씩 보기랑 카테고리네임이 연동 됨. -->
+		<input type= "hidden" name="categoryName" value="<%=categoryName%>">
+		<select name="rowPerPage">
+		<%
+			for(int i=10; i<=30; i+=5){
+				//rowPerPage가 i일 경우 i를 선택되도록 하는 코드
+				if(rowPerPage==i){
+		%>
+					<option value="<%=i%>" selected="selected"><%=i%></option>
+		<%
+				} else{
+		%>
+					<option value="<%=i%>"><%=i%></option>
+		<%	
+			}
+		}
+		%>
+		</select>
+		<button type="submit" class="btn btn-outline-primary py-1">보기</button>
+		<a href="<%=request.getContextPath()%>/themes/classimax-premium/insertEbookForm.jsp"><button type="button" class="btn btn-outline-primary py-1 float-right">NEW</button></a>
+	</form>
+	<hr>
+		<!-- ad listing list  -->
+		<%
+		for(Ebook e : list) {
+		%>
+				<div class="ad-listing-list mt-20">
+    <div class="row p-lg-3 p-sm-5 p-4">
+        <div class="col-lg-4 align-self-center">
+        <a href="<%=request.getContextPath()%>/ebook/ebookOne.jsp?ebookISBN=<%=e.getEbookISBN()%>">
+        	<img src="<%=request.getContextPath()%>/img/<%=e.getEbookImg()%>" class="img-fluid" alt="">
+        </a>
+        </div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-lg-6 col-md-10">
+                    <div class="ad-listing-content">
+                    	<div>
+                            <%=e.getEbookISBN()%>
+                        </div>
+                        <div>
+                            <a href="<%=request.getContextPath()%>/ebook/ebookOne.jsp?ebookISBN=<%=e.getEbookISBN()%>" class="font-weight-bold"><%=e.getEbookTitle()%></a>
+                        </div>
+                        <ul class="list-inline mt-2 mb-3">
+                            <li class="list-inline-item"><i class="fa fa-book"></i> <%=e.getCategoryName()%></li>
+                            <li class="list-inline-item"><i class="fa fa-calendar"></i><%=e.getEbookDate().substring(0,11)%></li>
+                            <li class="list-inline-item"><i class="fa fa-user"></i> <%=e.getEbookAuthor()%></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 align-self-center">
+                    <div class="product-ratings float-lg-right pb-3">
+                        <ul class="list-inline">
+                            <li class="list-inline-item selected"><i class="fa fa-won"></i> <%=e.getEbookPrice()%></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+		<%
+			}
+		 %>
+<hr>
+				<!-- ad listing list  -->
+						<!-- pagination -->
 		
 		<div class="pagination justify-content-center">
 			<nav aria-label="Page navigation example">
@@ -184,13 +226,13 @@
 				if(currentPage>1 && currentPage<lastPage){ //현재페이지가 1보다 크고 라스트페이지보다 작으면 처음, 이전, 현재, 다음, 끝 표시.
 				%>
 					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp?currentPage=1&rowPerPage=<%=rowPerPage%>&searchWord=<%=searchWord%>" aria-label="Previous">
+						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?currentPage=1&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 							<span class="sr-only">Previous</span>
 						</a>
 					</li>
 					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>&searchWord=<%=searchWord%>">
+						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>">
 						<%=currentPage-1%></a>
 					</li>
 					<li class="page-item active"><a class="page-link" href=""><%=currentPage%></a></li>
@@ -202,13 +244,13 @@
 				} else if(currentPage>=lastPage){ //현재페이지가 라스트페이지이면 처음, 이전, 현재 표시
 				%>
 					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp?currentPage=1&rowPerPage=<%=rowPerPage%>&searchWord=<%=searchWord%>" aria-label="Previous">
+						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?currentPage=1&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 							<span class="sr-only">Previous</span>
 						</a>
 					</li>
 					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>&searchWord=<%=searchWord%>">
+						<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>">
 						<%=currentPage-1%></a>
 					</li>
 					<li class="page-item active"><a class="page-link" href=""><%=currentPage%></a></li>
@@ -217,11 +259,11 @@
 				if(currentPage<lastPage) {
 				%>
 					<li class="page-item">
-					<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp?currentPage=<%=currentPage+1%>&rowPerPage=<%=rowPerPage%>&searchWord=<%=searchWord%>">
+					<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?currentPage=<%=currentPage+1%>&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>">
 					<%=currentPage+1%></a>
 				</li>
 				<li class="page-item">
-					<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp?currentPage=<%=lastPage%>&rowPerPage=<%=rowPerPage%>&searchWord=<%=searchWord%>" aria-label="Next">
+					<a class="page-link" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp?currentPage=<%=lastPage%>&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>" aria-label="Next">
 						<span aria-hidden="true">&raquo;</span>
 						<span class="sr-only">Next</span>
 					</a>
@@ -233,24 +275,9 @@
 			</nav>
 		</div>
 			<!-- /pagination -->
-			</div>
-			<div class="col-md-10 offset-md-1 col-lg-3 offset-lg-0">
-				<div class="sidebar">
-					<!-- Search Widget -->
-					<form action="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp" method="post">
-					<div class="widget search p-0">
-						<div class="input-group">
-						   <input type="text" class="form-control" name="searchWord" placeholder="Search...">
-						   <span class="input-group-addon"> <button type="submit" class="btn btn-main-sm"><i class="fa fa-search"></i></button></span>
-					    </div>
-					</div>
-					</form>
-				</div>
-			</div>
-		</div>
+
 	</div>
 </section>
-
 <!--============================
 =            Footer            =
 =============================-->
@@ -303,4 +330,3 @@
 </body>
 
 </html>
-

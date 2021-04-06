@@ -16,9 +16,9 @@
 	</a>
 	<!-- Dropdown list -->
 	<div class="dropdown-menu">
-		<a class="dropdown-item" href="<%=request.getContextPath()%>/category/categoryList.jsp">Category</a>
-		<a class="dropdown-item" href="<%=request.getContextPath()%>/ebook/ebookList.jsp">E-book</a>
-		<a class="dropdown-item" href="<%=request.getContextPath()%>/orders/ordersList.jsp">Order</a>
+		<a class="dropdown-item" href="<%=request.getContextPath()%>/themes/classimax-premium/categoryList.jsp">Category</a>
+		<a class="dropdown-item" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp">E-book</a>
+		<a class="dropdown-item" href="<%=request.getContextPath()%>/themes/classimax-premium/ordersList.jsp">Order</a>
 	</div>
 </li>
 <li class="nav-item">

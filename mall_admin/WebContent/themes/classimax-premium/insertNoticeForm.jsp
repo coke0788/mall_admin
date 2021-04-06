@@ -105,7 +105,7 @@
 			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
 				<!-- Notice form 영역 -->
 				<div class="widget welcome-message">
-					<h2>Edit Notice</h2>
+					<h2>Post Notice</h2>
 				</div>
 				<!-- Edit Personal Info -->
 				<div class="row">
@@ -115,14 +115,14 @@
 						<input type="text" name="managerId" value=<%=manager.getManagerId()%> hidden="hidden">
 							<div class="form-group">
 								<label>TITLE</label>
-								<input type="text" class="form-control" name="noticeTitle" required pattern="^[[A-Za-zㄱ-ㅎ0-9]$@$!%*#?&]+$">
+								<input type="text" class="form-control" name="noticeTitle" required pattern="^[[A-Za-zㄱ-ㅎ0-9]$@$!%*#?&\s]+$">
 							</div>
 							<div class="form-group">
 								<label>CONTENT</label>
 								<textarea class="form-control" name="noticeContent" rows="10" cols="100"></textarea>
 							</div>
 							<div class="form-group">
-								<label>EDITOR</label>
+								<label>WRITER</label>
 								<h5><%=manager.getManagerName()%></h5>
 							</div>
 							<!-- Submit Button -->

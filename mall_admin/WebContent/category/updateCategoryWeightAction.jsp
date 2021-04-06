@@ -5,7 +5,7 @@
 	//매니저 등록이 안 되어 있거나 매니저레벨이 1보다 낮은 경우 진입 불가
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
+		response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 		return;
 	}
 	//넘버, 가중치 가져오기
@@ -16,5 +16,5 @@
 	System.out.println("카테고리 수정 넘버 :" + categoryNo);
 	System.out.println("카테고리 수정 가중치 :" + categoryWeight);
 	//수정 완료 시 리스트로 이동 요청
-	response.sendRedirect(request.getContextPath()+"/category/categoryList.jsp");
+	response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/categoryList.jsp");
 %>

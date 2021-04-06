@@ -3,14 +3,14 @@
 <%@ page import = "gdu.mall.dao.*" %>
 <%@ page import = "java.util.*" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 
   <!-- SITE TITTLE -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>noticeOne</title>
+  <title>categoryList</title>
   
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
@@ -21,7 +21,6 @@
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-slider.css">
   <!-- Font Awesome -->
   <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Owl Carousel -->
   <link href="plugins/slick-carousel/slick/slick.css" rel="stylesheet">
   <link href="plugins/slick-carousel/slick/slick-theme.css" rel="stylesheet">
@@ -42,6 +41,7 @@
 </head>
 
 <body class="body-wrapper">
+
 <!-- 네비게이션 바 부분 -->
 <section>
 	<div class="container">
@@ -57,99 +57,103 @@
 							<jsp:include page="/inc/adminMenu.jsp"></jsp:include>
 						</ul>
 					<%
-						request.setCharacterEncoding("utf-8");
 						//관리자 진입 조건 설정
 						Manager manager = (Manager)session.getAttribute("sessionManager"); //manager 사용하기 위해서 불러오기.
-						if(manager == null || manager.getManagerLevel() < 1){ //만약 session manager 레벨이 1보다 낮은 경우 admin index로 이동
+						if(manager == null || manager.getManagerLevel() < 1){ //만약 session manager가 null인 경우 admin index로 이동
 							response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 							return;
 						}
-						//NoticeNo 받아오기. NoticeDao 클래스의 selectNoticeOne 호출
-						int noticeNo=Integer.parseInt(request.getParameter("noticeNo"));
-						Notice notice=NoticeDao.selectNoticeOne(noticeNo);
-						System.out.println("넘버:"+noticeNo);
+						//배열 받아오기
+						ArrayList<Category> list = CategoryDao.selectCategoryList();
 					%>
 						<ul class="navbar-nav ml-auto mt-10">
 							<li class="nav-item">
-							<a class="nav-link login-button" href="<%=request.getContextPath()%>/manager/logoutManagerAction.jsp">Logout</a>
+								<a class="nav-link login-button" href="<%=request.getContextPath()%>/manager/logoutManagerAction.jsp">Logout</a>
 							</li>
 						</ul>
-				</div>
-			</nav>
-		</div>
-	</div>
-</div>
-</section>
-<!--=================================
-=            Single Blog            =
-==================================-->
-
-
-<section class="blog single-blog section">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-10 offset-md-2 col-lg-9 offset-lg-2">
-				<article class="single-post">
-					<h4><%=notice.getNoticeNo()%>.</h4> <h3>&nbsp; &nbsp; &nbsp;<i class="fa fa-bell"></i> <%=notice.getNoticeTitle()%></h3>
-					<ul class="list-inline">
-						<li class="list-inline-item">by <%=manager.getManagerId()%></li>
-						<li class="list-inline-item"><%=notice.getNoticeDate().substring(0,16)%></li>
-					</ul>
-					<img src="images/news.jpg" height="350" alt="article-01">
-					<p><%=notice.getNoticeContent()%></p>
-					<a href="<%=request.getContextPath()%>/notice/deleteNoticeAction.jsp?noticeNo=<%=notice.getNoticeNo()%>"><button class="btn btn-outline-secondary py-1 float-right">DELETE</button></a>
-					<a href="<%=request.getContextPath()%>/themes/classimax-premium/updateNoticeForm.jsp?noticeNo=<%=notice.getNoticeNo()%>"><button class="btn btn-transparent py-1 float-right">EDIT</button></a><br>
-				</article>
-				<!-- 댓글 리스트 -->
-				<div class="block comment">
-					<h4>Comment List</h4><hr>
-					<div class="form-group mb-30">
-				<%
-					ArrayList<Comment> commentList = CommentDao.selectCommentListByNoticeNo(noticeNo);
-					for(Comment c : commentList) {
-				%>
-					<div class="row">
-						<div class="form-group mb-30">
-							<label for="message"><i class="fa fa-comment"></i> Message</label>
-								<div><%=c.getCommentContent()%></div><br>
-									<label for="name"><i class="fa fa-user"></i> Date/Author of Comment</label>
-								<div><%=c.getCommentDate().substring(0,16)%> / <%=c.getManagerId()%>
-								<a href="<%=request.getContextPath()%>/notice/deleteCommentAction.jsp?commentNo=<%=c.getCommentNo()%>&noticeNo=<%=notice.getNoticeNo()%>"><button type="button" class="btn btn-outline-secondary py-0">DELETE</button></a>
-							</div><hr>
-						</div>
 					</div>
-				<%
-					}
-				%>
-					</div>
-				</div>
-				<!-- 코멘트 작성 -->
-				<div class="block comment">
-					<h4>Leave A Comment</h4>
-					<form action="<%=request.getContextPath()%>/notice/insertCommentAction.jsp?noticeNo=<%=notice.getNoticeNo()%>" method="post">
-						<input type="hidden" name="noticeNo" value="<%=notice.getNoticeNo()%>">
-						<!-- Message -->
-						<div class="form-group mb-30">
-						    <label for="message"><i class="fa fa-comment"></i> Message</label>
-						    <textarea class="form-control" name="commentContent" rows="8"></textarea>
-						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-6">
-								<!-- Name -->
-								<div class="form-group mb-30">
-								    <label for="name"><i class="fa fa-user"></i> Name</label>
-								    <input type="text" class="form-control" name="managerId" value=<%=manager.getManagerId()%> readonly="readonly">
-								</div>
-							</div>
-						</div>
-						<button type="submit" class="btn btn-transparent float-right">Leave Comment</button><br><br>
-					</form>
-				</div>
+				</nav>
 			</div>
 		</div>
 	</div>
 </section>
-
+<!--==================================
+=            User Profile            =
+===================================-->
+<section class="dashboard section">
+	<!-- Container Start -->
+	<div class="container text-center">
+		<!-- Row Start -->
+		<div class="row">
+			<div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+				<div class="sidebar">
+						<!-- User Name -->
+						<h5 class="text-center"><%=manager.getManagerName()%></h5>
+						<p>Level : <%=manager.getManagerLevel()%></p>
+					</div>
+				</div>
+			<div class="col-md-2 offset-md-1 col-lg-8 offset-lg-2">
+				<!-- manager list -->
+				<div class="widget dashboard-container">
+					<h3 class="widget-header">Category List</h3>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th class="text-center">Name</th>
+								<th class="text-center">Weight</th>
+								<th class="text-center">Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+						<%
+							for(Category c : list) {
+						%>
+							<tr>
+								<td class="product-thumb" style="width: 8.33%"><%=c.getCategoryNo()%></td>
+								<td class="product-category" ><%=c.getCategoryName()%></td>
+								<td class="product-category" style="width: 25%">
+								<form action="<%=request.getContextPath()%>/category/updateCategoryWeightAction.jsp" method="post">
+							<!-- input type hidden 설정 시 매니저 넘버 값은 넘어가지만 화면에는 보이지 않음. -->
+								<input type = "hidden" name = "categoryNo" value="<%=c.getCategoryNo()%>">
+								<select name ="categoryWeight">
+									<%
+									for(int i=0; i<=10; i++){
+										if(c.getCategoryWeight()==i){
+									%>
+											<option value = "<%=i%>" selected="selected"><%=i%></option>
+									<%	
+										}else{
+									%>
+											<option value = "<%=i%>"><%=i%></option>
+									<%	
+										}
+									}
+									%>
+								</select>
+								<button type="submit" class="btn btn-main-sm">edit</button>
+								</form></td>
+								<td class="text-center" style="width: 8.33%">
+									<div class="justify-content-center">
+										<a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" href="<%=request.getContextPath()%>/category/deleteCategoryAction.jsp?categoryNo=<%=c.getCategoryNo()%>">
+											<i class="fa fa-trash"></i>
+										</a>
+									</div>
+								</td>
+							</tr>
+							<%
+							}
+							%>
+						</tbody>
+					</table>
+				</div>
+		</div>
+	</div>
+			<a href="<%=request.getContextPath()%>/themes/classimax-premium/insertCategoryForm.jsp"><button type="button" class="btn btn-outline-primary py-1">NEW</button></a>
+		<!-- Row End -->
+</div>
+	<!-- Container End -->
+</section>
 <!--============================
 =            Footer            =
 =============================-->
@@ -200,6 +204,4 @@
 <script src="js/script.js"></script>
 
 </body>
-
 </html>
-

@@ -2,4 +2,6 @@
 2. login이랑 isert manager완료!
 3. managerlist완료!
 4. client 완료!
-5. notice List 완료. insert 완료. noticeone 진행중
+5. notice 완료 - 댓글 몇 개 있는지 표시하고 싶음. 다 하고 추가로 해보기.
+6. category 완료
+7. ebook List 진행중

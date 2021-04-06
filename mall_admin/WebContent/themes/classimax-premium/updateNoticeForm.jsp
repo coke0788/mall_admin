@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>noticeOne</title>
+  <title>updateNoticeForm</title>
   
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
@@ -21,7 +21,6 @@
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-slider.css">
   <!-- Font Awesome -->
   <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Owl Carousel -->
   <link href="plugins/slick-carousel/slick/slick.css" rel="stylesheet">
   <link href="plugins/slick-carousel/slick/slick-theme.css" rel="stylesheet">
@@ -60,14 +59,19 @@
 						request.setCharacterEncoding("utf-8");
 						//관리자 진입 조건 설정
 						Manager manager = (Manager)session.getAttribute("sessionManager"); //manager 사용하기 위해서 불러오기.
-						if(manager == null || manager.getManagerLevel() < 1){ //만약 session manager 레벨이 1보다 낮은 경우 admin index로 이동
+						if(manager == null){ //만약 session manager가 null인 경우 admin index로 이동
 							response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 							return;
+						} 
+						//매니저 레벨이 1인 경우 리스트로 재이동
+						if(manager.getManagerLevel()==1){
+							response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/noticeList.jsp");
+							System.out.println("레벨이 1입니다.");
+							return;
 						}
-						//NoticeNo 받아오기. NoticeDao 클래스의 selectNoticeOne 호출
 						int noticeNo=Integer.parseInt(request.getParameter("noticeNo"));
 						Notice notice=NoticeDao.selectNoticeOne(noticeNo);
-						System.out.println("넘버:"+noticeNo);
+						System.out.println("no:"+noticeNo);
 					%>
 						<ul class="navbar-nav ml-auto mt-10">
 							<li class="nav-item">
@@ -80,70 +84,64 @@
 	</div>
 </div>
 </section>
-<!--=================================
-=            Single Blog            =
-==================================-->
+<!--==================================
+=            User Profile            =
+===================================-->
 
-
-<section class="blog single-blog section">
+<section class="user-profile section">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-10 offset-md-2 col-lg-9 offset-lg-2">
-				<article class="single-post">
-					<h4><%=notice.getNoticeNo()%>.</h4> <h3>&nbsp; &nbsp; &nbsp;<i class="fa fa-bell"></i> <%=notice.getNoticeTitle()%></h3>
-					<ul class="list-inline">
-						<li class="list-inline-item">by <%=manager.getManagerId()%></li>
-						<li class="list-inline-item"><%=notice.getNoticeDate().substring(0,16)%></li>
-					</ul>
-					<img src="images/news.jpg" height="350" alt="article-01">
-					<p><%=notice.getNoticeContent()%></p>
-					<a href="<%=request.getContextPath()%>/notice/deleteNoticeAction.jsp?noticeNo=<%=notice.getNoticeNo()%>"><button class="btn btn-outline-secondary py-1 float-right">DELETE</button></a>
-					<a href="<%=request.getContextPath()%>/themes/classimax-premium/updateNoticeForm.jsp?noticeNo=<%=notice.getNoticeNo()%>"><button class="btn btn-transparent py-1 float-right">EDIT</button></a><br>
-				</article>
-				<!-- 댓글 리스트 -->
-				<div class="block comment">
-					<h4>Comment List</h4><hr>
-					<div class="form-group mb-30">
-				<%
-					ArrayList<Comment> commentList = CommentDao.selectCommentListByNoticeNo(noticeNo);
-					for(Comment c : commentList) {
-				%>
-					<div class="row">
-						<div class="form-group mb-30">
-							<label for="message"><i class="fa fa-comment"></i> Message</label>
-								<div><%=c.getCommentContent()%></div><br>
-									<label for="name"><i class="fa fa-user"></i> Date/Author of Comment</label>
-								<div><%=c.getCommentDate().substring(0,16)%> / <%=c.getManagerId()%>
-								<a href="<%=request.getContextPath()%>/notice/deleteCommentAction.jsp?commentNo=<%=c.getCommentNo()%>&noticeNo=<%=notice.getNoticeNo()%>"><button type="button" class="btn btn-outline-secondary py-0">DELETE</button></a>
-							</div><hr>
+			<div class="col-md-10 offset-md-1 col-lg-3 offset-lg-0">
+				<div class="sidebar">
+					<!-- User Widget -->
+					<div class="widget user">
+						<!-- User Image -->
+						<div class="image d-flex justify-content-center">
+							<img src="images/user.png" alt="" class="">
 						</div>
-					</div>
-				<%
-					}
-				%>
+						<!-- User Profile -->
+						<h5 class="text-center"><%=manager.getManagerName()%></h5>
+						<h3 class="text-center">Level: <%=manager.getManagerLevel()%></h3>
 					</div>
 				</div>
-				<!-- 코멘트 작성 -->
-				<div class="block comment">
-					<h4>Leave A Comment</h4>
-					<form action="<%=request.getContextPath()%>/notice/insertCommentAction.jsp?noticeNo=<%=notice.getNoticeNo()%>" method="post">
-						<input type="hidden" name="noticeNo" value="<%=notice.getNoticeNo()%>">
-						<!-- Message -->
-						<div class="form-group mb-30">
-						    <label for="message"><i class="fa fa-comment"></i> Message</label>
-						    <textarea class="form-control" name="commentContent" rows="8"></textarea>
-						</div>
-						<div class="row">
-							<div class="col-sm-12 col-md-6">
-								<!-- Name -->
-								<div class="form-group mb-30">
-								    <label for="name"><i class="fa fa-user"></i> Name</label>
-								    <input type="text" class="form-control" name="managerId" value=<%=manager.getManagerId()%> readonly="readonly">
-								</div>
+			</div>
+			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
+				<!-- Notice form 영역 -->
+				<div class="widget welcome-message">
+					<h2>Edit Notice</h2>
+				</div>
+				<!-- 수정 폼 -->
+				<div class="row">
+					<div class="col-lg-9 col-md-10">
+					<div class="widget change-email mb-0">
+						<form action="<%=request.getContextPath()%>/notice/updateNoticeAction.jsp" method="post">
+						<input type="text" name="noticeNo" value="<%=notice.getNoticeNo()%>" hidden="hidden">
+							<div class="form-group">
+								<label>No</label>
+								<input type="text" class="form-control" readonly="readonly" value="<%=notice.getNoticeNo()%>">
 							</div>
-						</div>
-						<button type="submit" class="btn btn-transparent float-right">Leave Comment</button><br><br>
-					</form>
+							<div class="form-group">
+								<label>TITLE</label>
+								<input type="text" class="form-control" name="noticeTitle" value="<%=notice.getNoticeTitle()%>" required pattern="^[[A-Za-zㄱ-ㅎ0-9]$@$!%*#?&]+$">
+							</div>
+							<div class="form-group">
+								<label>CONTENT</label>
+								<textarea class="form-control" name="noticeContent" rows="10" cols="100"><%=notice.getNoticeContent()%></textarea>
+							</div>
+							<div class="form-group">
+								<label>WRITER</label>
+								<h5><%=manager.getManagerName()%></h5>
+							</div>
+							<div class="form-group">
+								<label>POSTING DATE</label>
+								<h5><%=notice.getNoticeDate()%></h5>
+							</div>
+							<!-- Submit Button -->
+							<button type="submit" class="btn btn-transparent py-2">EDIT</button>
+							<a href="<%=request.getContextPath()%>/themes/classimax-premium/noticeOne.jsp?noticeNo=<%=notice.getNoticeNo()%>"><button type="button" class="btn btn-outline-secondary py-2">CANCEL</button></a>
+						</form>
+					</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -202,4 +200,3 @@
 </body>
 
 </html>
-
