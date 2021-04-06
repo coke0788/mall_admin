@@ -1,0 +1,5 @@
+1. adminindex 완료!
+2. login이랑 isert manager완료!
+3. managerlist완료!
+4. client 완료!
+5. notice List 완료. insert 완료. noticeone 진행중
