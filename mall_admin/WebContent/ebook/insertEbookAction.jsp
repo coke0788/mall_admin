@@ -8,7 +8,7 @@
 	//매니저 등록이 안 되어 있거나 매니저레벨이 1보다 낮은 경우 진입 불가
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
+		response.sendRedirect(request.getContextPath()+"themes/classimax-premium/adminIndex.jsp");
 		return;
 	}
 	
@@ -39,11 +39,17 @@
 	String returnEbookISBN=EbookDao.selectEbookISBN(ebookISBN);
 	if(returnEbookISBN!=null){//이미 isbn이 있다면
 		System.out.println("존재하는 ISBN");
-		response.sendRedirect(request.getContextPath()+"/ebook/ebookList.jsp");
+		response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/ebookList.jsp");
+		return;
+	}
+	//카테고리 미선택 시 오류 메세지 뜨는거 방지
+	if(categoryName.equals("")){
+		System.out.println("카테고리 미선택");
+		response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/insertEbookForm.jsp");
 		return;
 	}
 	EbookDao.insertEbook(ebook);
 	
-	response.sendRedirect(request.getContextPath()+"/ebook/ebookList.jsp");
+	response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/ebookList.jsp");
 	
 %>

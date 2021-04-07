@@ -7,13 +7,13 @@
 	//매니저 등록이 안 되어 있거나 매니저레벨이 1보다 낮은 경우 진입 불가
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
+		response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 		return;
 	}
 	//reguestgetparameter로 받으면 null로 나옴. enctype을 multipartformdata로 넘겼기 때문에
 	//파일을 다운로드 받을 위치 설정
 	// String path = application.getRealPath("img"); //application=톰캣, img라는 폴더를 찾아서 경로를 가져와라
-	String path="C:/goodee/web/mall_admin/WebContent/img";
+	String path= application.getRealPath("img");
 	System.out.println(path); //경로 확인
 	
 	int size=1024 * 1024 * 100;
@@ -30,5 +30,5 @@
 	ebook.setEbookImg(ebookImg);
 	EbookDao.updateEbookImg(ebook);
 	//등록 완료 되면 상세페이지로 이동
-	response.sendRedirect(request.getContextPath()+"/ebook/ebookOne.jsp?ebookISBN="+ebook.getEbookISBN());
+	response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/ebookOne.jsp?ebookISBN="+ebook.getEbookISBN());
 %>

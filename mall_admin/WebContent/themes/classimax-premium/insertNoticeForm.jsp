@@ -109,7 +109,7 @@
 				</div>
 				<!-- Edit Personal Info -->
 				<div class="row">
-					<div class="col-lg-9 col-md-10">
+					<div class="col-md-12 offset-md-0 offset-lg-0">
 					<div class="widget change-email mb-0">
 						<form action="<%=request.getContextPath()%>/notice/insertNoticeAction.jsp" method="post">
 						<input type="text" name="managerId" value=<%=manager.getManagerId()%> hidden="hidden">

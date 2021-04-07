@@ -128,7 +128,7 @@
 					<div class="col-md-2 offset-md-2 col-lg-5 offset-lg-0" style="width:29%">
 					<form action="<%=request.getContextPath()%>/themes/classimax-premium/clientList.jsp" method="post">
 						<!-- 히든값으로 searchword 넘기기 -->
-						<input type= "hidden" name="searchword" value="<%=searchWord%>">
+						<input type= "hidden" name="searchWord" value="<%=searchWord%>">
 						<select name="rowPerPage" style="width:100px;height:22px; font-size:12px;">
 						<%
 							for(int i=10; i<=30; i+=5){
@@ -166,7 +166,7 @@
 								<td class="text-center" style="width: 8.33%">
 									<div class="justify-content-center">
 										<a data-toggle="tooltip" data-placement="top" title="Modify" href="<%=request.getContextPath()%>/themes/classimax-premium/updateClientForm.jsp?clientMail=<%=c.getClientMail()%>">
-											<i class="fa fa-file-text"></i>
+											<i class="fa fa-edit"></i>
 										</a>
 										<a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" href="<%=request.getContextPath()%>/client/deleteClientAction.jsp?clientMail=<%=c.getClientMail()%>">
 											<i class="fa fa-trash"></i>

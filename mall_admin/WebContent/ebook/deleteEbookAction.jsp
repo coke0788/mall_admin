@@ -5,7 +5,7 @@
 	//매니저 등록이 안 되어 있거나 매니저레벨이 1보다 낮은 경우 진입 불가
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
+		response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 		return;
 	}
 
@@ -20,5 +20,5 @@
 	EbookDao.deleteEbook(ebook);
 	System.out.println("ISBN:"+ebookISBN);
 	
-	response.sendRedirect(request.getContextPath()+"/ebook/ebookList.jsp");
+	response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/ebookList.jsp");
 %>

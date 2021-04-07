@@ -100,7 +100,8 @@
                                 client pw: <input type="password" required pattern="^[A-Za-z0-9]{4,16}$" name="clientPw" placeholder="*only 4-16 English letters and numbers are allowed." class="border p-3 w-100 my-2">
                                 <div class="loggedin-forgot d-inline-flex my-3">
                                 </div>
-                                <button type="submit" class="d-block py-3 px-4 bg-primary text-white border-0 rounded font-weight-bold">Modify</button>
+                                <button type="submit" class="py-3 px-4 bg-primary text-white border-0 rounded font-weight-bold">Modify</button>
+                                <a href="<%=request.getContextPath()%>/themes/classimax-premium/clientList.jsp"><button type="button" class="py-3 px-4 bg-secondary text-white border-0 rounded font-weight-bold">Cancel</button></a>
                             </fieldset>
                         </form>
                     </div>

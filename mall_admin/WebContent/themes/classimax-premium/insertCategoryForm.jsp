@@ -103,16 +103,16 @@
 				</div>
 				<!-- Edit Personal Info -->
 				<div class="row">
-					<div class="col-lg-9 col-md-10">
+					<div class="col-md-12 offset-md-0 offset-lg-0">
 					<div class="widget change-email mb-0">
 						<form action="<%=request.getContextPath()%>/category/insertCategoryAction.jsp" method="post">
 							<div class="form-group">
 								<label>NAME</label>
-								<input type="text" class="form-control" name="categoryName" required pattern="^[A-Za-zㄱ-ㅎ0-9]+$">
+								<input type="text" class="form-control col-md-6" name="categoryName" required pattern="^[A-Za-zㄱ-ㅎ0-9]+$">
 							</div>
 							<div class="form-group">
-								<label>WEIGHT</label>
-								<select name ="categoryWeight">
+								<label class = "col-md-2">WEIGHT</label>
+								<select name ="categoryWeight" class="col-md-4">
 									<%
 									for(int i=0; i<=10; i++){
 									%>

@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>insertEbookForm</title>
+  <title>updateEbookImgForm</title>
   
   <!-- FAVICON -->
   <link href="img/favicon.png" rel="shortcut icon">
@@ -41,8 +41,6 @@
 </head>
 
 <body class="body-wrapper">
-
-
 <!-- 네비게이션 바 부분 -->
 <section>
 	<div class="container">
@@ -65,8 +63,8 @@
 							response.sendRedirect(request.getContextPath()+"/themes/classimax-premium/adminIndex.jsp");
 							return;
 						} 
-						ArrayList<String> categoryNameList = CategoryDao.categoryNameList();
-						System.out.println("카테고리 목록 사이즈 :" + categoryNameList.size());
+						String ebookISBN=request.getParameter("ebookISBN");
+						Ebook ebook=EbookDao.selectEbookOne(ebookISBN);
 					%>
 						<ul class="navbar-nav ml-auto mt-10">
 							<li class="nav-item">
@@ -101,59 +99,27 @@
 				</div>
 			</div>
 			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
-				<!-- 작성 -->
+				<!-- Notice form 영역 -->
+				<div class="widget welcome-message">
+					<h2>Update E-book Image</h2>
+				</div>
+				<!-- Edit Personal Info -->
 				<div class="row">
-					<div class="col-md-12 offset-md-1 offset-lg-0">
-						<div class="widget personal-info">
-							<h3 class="widget-header user">Edit New E-book Information</h3>
-								<!-- img, date, state는 기본값으로 가져오므로 안 만듦-->
-							<form action="<%=request.getContextPath()%>/ebook/insertEbookAction.jsp" method="post">
-								<div class="form-group">
-									<label for="first-name" class="col-sm-2">Category</label>
-									<select name="categoryName">
-										<option value=""> SELECT </option>
-										<%
-											for(String cn : categoryNameList){
-										%>
-											<!-- 카테고리이름 배열에 있는거 다 가져오기 -->
-											<option value="<%=cn%>"><%=cn%></option>
-										<%	
-											}
-										%>
-									</select>
-								</div>
-								<div class="form-group col-md-5">
-									<label>ISBN</label>
-									<input type="text" class="form-control" name="ebookISBN" required pattern="^\d{9}-\d{1}$">
-								</div>
-								<div class="form-group col-md-5">
-									<label>Title</label>
-									<input type="text" class="form-control" name="ebookTitle" required pattern="^[[A-Za-z가-힣0-9]$@$!%*#?&]+$">
-								</div>
-								<div class="form-group col-md-5">
-									<label>Author</label>
-									<input type="text" class="form-control" name="ebookAuthor" required pattern="^[A-Za-z가-힣0-9]+$">
-								</div>
-								<div class="form-group col-md-5">
-									<label>Publisher</label>
-									<input type="text" class="form-control" name="ebookCompany" required pattern="^[[]A-Za-z가-힣0-9]$@$!%*#?&]+$">
-								</div>
-								<div class="form-group col-md-3">
-									<label>Pages</label>
-									<input type="text" class="form-control" name="ebookPageCount" required pattern="^[0-9]+$">
-								</div>
-								<div class="form-group col-md-3">
-									<label>Price</label>
-									<input type="text" class="form-control" name="ebookPrice" required pattern="^[0-9]+$">
-								</div>
-								<div class="form-group col-md-5">
-									<label>Summary</label>
-									<textarea rows="5" cols="80" name="ebookSummary" placeholder="If you want to add the introducing video, please copy&paste source code of video in here!"></textarea>
-								</div>
-								<button type="submit" class="btn btn-transparent">EDIT</button>
-								<a href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp"><button type="button" class="btn btn-outline-secondary">CANCEL</button></a>
-							</form>
-						</div>
+					<div class="col-md-12 offset-md-0 offset-lg-0">
+					<div class="widget change-email mb-0">
+						<form action="<%=request.getContextPath()%>/ebook/updateEbookImgAction.jsp" method="post" enctype="multipart/form-data">
+						<input type="text" name="ebookISBN" value="<%=ebookISBN%>" hidden="hidden">
+							<div class="form-group">
+								<label class="col-md-2">PICTURE</label>
+								<!-- enctype을 추가하면 데이터(이미지의..데이터?)가 넘어감-->
+									<input type="hidden" name="ebookISBN" value="<%=ebookISBN%>">
+									<input type="file" class="form-control" name="ebookImg"><br>
+							</div>
+							<!-- Submit Button -->
+							<button type="submit" class="btn btn-transparent py-2">EDIT</button>
+							<a href="<%=request.getContextPath()%>/themes/classimax-premium/ebookOne.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><button type="button" class="btn btn-outline-secondary py-2">CANCEL</button></a>
+						</form>
+					</div>
 					</div>
 				</div>
 			</div>

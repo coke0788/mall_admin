@@ -15,16 +15,16 @@ public class EbookDao {
 		//2. 리턴타입 초기화
 		ArrayList<Ebook> list = new ArrayList<>();
 		//1. 쿼리 및 처리
-		String sql=null;
+		String sql="";
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement stmt = null;
-		if(categoryName==null) { //카테고이름이 널이라면 카테고리값 안 받아옴.
-			sql="SELECT category_name categoryName, ebook_isbn ebookISBN, ebook_title ebookTitle, ebook_author ebookAuthor, ebook_date ebookDate, ebook_price ebookPrice FROM ebook ORDER BY ebook_date DESC LIMIT ?, ?";
+		if(categoryName.equals("")) { //카테고이름이 널이라면 카테고리값 안 받아옴.
+			sql="SELECT category_name categoryName, ebook_isbn ebookISBN, ebook_title ebookTitle, ebook_author ebookAuthor, ebook_date ebookDate, ebook_price ebookPrice, ebook_img ebookImg FROM ebook ORDER BY ebook_date DESC LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, beginRow);
 			stmt.setInt(2, rowPerPage);
 		} else {//카테고리가 널이 아니라면, 선택값이 있담녀, 카테고리값 받아옴.
-			sql="SELECT category_name categoryName, ebook_isbn ebookISBN, ebook_title ebookTitle, ebook_author ebookAuthor, ebook_date ebookDate, ebook_price ebookPrice FROM ebook WHERE category_name=? ORDER BY ebook_date DESC LIMIT ?, ?";
+			sql="SELECT category_name categoryName, ebook_isbn ebookISBN, ebook_title ebookTitle, ebook_author ebookAuthor, ebook_date ebookDate, ebook_price ebookPrice, ebook_img ebookImg FROM ebook WHERE category_name=? ORDER BY ebook_date DESC LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1,categoryName);
 			stmt.setInt(2, beginRow);
@@ -39,6 +39,7 @@ public class EbookDao {
 			e.setEbookAuthor(rs.getString("ebookAuthor"));
 			e.setEbookDate(rs.getString("ebookDate"));
 			e.setEbookPrice(rs.getInt("ebookPrice"));
+			e.setEbookImg(rs.getString("ebookImg"));
 			list.add(e);
 		}
 		//4. 리턴
@@ -51,7 +52,7 @@ public class EbookDao {
 			PreparedStatement stmt = null;
 			String sql = "";
 			//카테고리네임이 선택되지 않으면
-			if(categoryName==null) {
+			if(categoryName=="") {
 				sql = "SELECT COUNT(*) cnt FROM ebook";
 				stmt = conn.prepareStatement(sql);
 			} else { //카테고리 네임이 선택 되면

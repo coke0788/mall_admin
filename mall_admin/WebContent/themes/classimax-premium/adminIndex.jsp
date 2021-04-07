@@ -178,7 +178,7 @@ if(session.getAttribute("sessionManager")==null){
 	ArrayList<Notice> noticeList = NoticeDao.selectNoticeList(4, 0, "");
 	ArrayList<Manager> managerList = ManagerDao.selectManagerList(4, 0);
 	ArrayList<Client> clientList = ClientDao.selectClientListByPage(3, 0, "");
-	ArrayList<Ebook> ebookList = EbookDao.selectEbookList(4, 0, null);
+	ArrayList<Ebook> ebookList = EbookDao.selectEbookList(4, 0, "");
 	ArrayList<OrdersAndEbookAndClient> oecList = OrdersDao.selectOrdersListByPage(4, 0);
 		
 %>
@@ -208,7 +208,7 @@ if(session.getAttribute("sessionManager")==null){
 							<%
 								}
 							%>
-								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp">[more]</a></li>
+								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/noticeList.jsp"><i class="fa fa-caret-right"></i>more</a></li>
 							</ul>
 						</div><!-- /공지 -->
 					</div> <!-- 관리자 -->
@@ -227,7 +227,7 @@ if(session.getAttribute("sessionManager")==null){
 							<%
 								}
 							%>
-								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/managerList.jsp">[more]</a></li>
+								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/managerList.jsp"><i class="fa fa-caret-right"></i>more</a></li>
 							</ul>
 						</div> <!-- /관리자 -->
 					</div> <!-- 고객 -->
@@ -245,7 +245,7 @@ if(session.getAttribute("sessionManager")==null){
 							<%
 								}
 							%>
-								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/clientList.jsp">[more]</a></li>
+								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/clientList.jsp"><i class="fa fa-caret-right"></i>more</a></li>
 							</ul>
 						</div><!-- /고객 -->
 					</div> <!-- 상품 -->
@@ -263,7 +263,7 @@ if(session.getAttribute("sessionManager")==null){
 							<%
 								}
 							%>
-								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp">[more]</a></li>
+								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/ebookList.jsp"><i class="fa fa-caret-right"></i>more</a></li>
 							</ul>
 						</div><!-- /상품 -->
 					</div> <!-- 주문 -->
@@ -281,7 +281,7 @@ if(session.getAttribute("sessionManager")==null){
 							<%
 								}
 							%>
-								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/ordersList.jsp">[more]</a></li>
+								<li><a class="text-right" href="<%=request.getContextPath()%>/themes/classimax-premium/ordersList.jsp"><i class="fa fa-caret-right"></i>more</a></li>
 							</ul>
 						</div><!-- /주문 -->
 					</div>
