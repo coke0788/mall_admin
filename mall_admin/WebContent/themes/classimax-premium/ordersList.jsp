@@ -170,7 +170,7 @@
 												<option value="주문완료">주문완료</option>
 												<option value="주문취소">주문취소</option>
 											</select>
-										<button type="submit" class="btn btn-link py-0 px-1"><i class="fa fa-edit"></i></button>
+										<button type="submit" class="btn btn-link py-0 px-1"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Modify"></i></button>
 										</form>
 								</td>
 							</tr>

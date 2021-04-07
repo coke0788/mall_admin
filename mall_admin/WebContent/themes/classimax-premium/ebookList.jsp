@@ -169,7 +169,7 @@
 		}
 		%>
 		</select>
-		<button type="submit" class="btn btn-outline-primary py-1">보기</button>
+		<button type="submit" class="btn btn-main-sm">보기</button>
 		<a href="<%=request.getContextPath()%>/themes/classimax-premium/insertEbookForm.jsp"><button type="button" class="btn btn-outline-primary py-1 float-right">NEW</button></a>
 	</form>
 	<hr>

@@ -91,7 +91,7 @@
 			<div class="col-md-8">
 				<div class="product-details">
 					<div class="product-meta">
-						<%=ebook.getEbookState()%> <a href="<%=request.getContextPath()%>/themes/classimax-premium/updateEbookStateForm.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><i class="fa fa-edit"></i></a>
+						<%=ebook.getEbookState()%> <a href="<%=request.getContextPath()%>/themes/classimax-premium/updateEbookStateForm.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><i data-toggle="tooltip" data-placement="top" title="Edit" class="fa fa-edit"></i></a>
 					</div>
 					<h6 class="product-meta"><%=ebook.getEbookISBN()%></h6>
 					<h1 class="product-title"><%=ebook.getEbookTitle()%></h1>
@@ -106,7 +106,7 @@
 					</div>
 						<img class="img-fluid" src="<%=request.getContextPath()%>/img/<%=ebook.getEbookImg()%>" width="350">
 					<div>
-						<a href="<%=request.getContextPath()%>/themes/classimax-premium/updateEbookImgForm.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><i class="fa fa-edit fa-lg fa-border"></i>EDIT PIC</a>
+						<a href="<%=request.getContextPath()%>/themes/classimax-premium/updateEbookImgForm.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><i class="fa fa-edit fa-lg fa-border" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>
 					</div>
 					<div class="content mt-5 pt-5">
 						<ul class="nav nav-pills  justify-content-center" id="pills-tab" role="tablist">
@@ -121,7 +121,7 @@
 						</ul>
 						<div class="tab-content" id="pills-tabContent">
 							<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-								<h3 class="tab-title">Introduce a book <a href="<%=request.getContextPath()%>/themes/classimax-premium/updateEbookSummaryForm.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><i class="fa fa-edit"></i></a></h3>
+								<h3 class="tab-title">Introduce a book <a href="<%=request.getContextPath()%>/themes/classimax-premium/updateEbookSummaryForm.jsp?ebookISBN=<%=ebook.getEbookISBN()%>"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit"></i></a></h3>
 								<p><%=ebook.getEbookSummary()%></p>
 							</div>
 							<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
